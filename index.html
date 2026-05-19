@@ -660,10 +660,201 @@
       direction: rtl;
     }
 
+    /* ---- SEARCH BUTTON ---- */
+    #search-btn {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(26,20,16,0.05);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--muted);
+      padding: 0.35rem 0.85rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    #search-btn:hover { background: rgba(201,168,76,0.1); color: var(--ink); border-color: var(--gold); }
+    #search-btn .kbd {
+      display: inline-block;
+      background: rgba(26,20,16,0.07);
+      border: 1px solid rgba(138,122,106,0.3);
+      border-radius: 3px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.62rem;
+      color: var(--muted);
+    }
+
+    /* ---- SEARCH MODAL ---- */
+    #search-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(26,20,16,0.55);
+      backdrop-filter: blur(4px);
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 8vh;
+    }
+    #search-modal.open { display: flex; }
+
+    #search-box {
+      background: var(--parchment);
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 620px;
+      margin: 0 1rem;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(26,20,16,0.3);
+    }
+
+    #search-input-wrap {
+      display: flex;
+      align-items: center;
+      padding: 0.85rem 1.1rem;
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+      gap: 0.65rem;
+    }
+
+    #search-input-wrap .search-icon {
+      color: var(--gold);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    #search-input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: 'Crimson Pro', serif;
+      font-size: 1.1rem;
+      color: var(--ink);
+      font-weight: 300;
+    }
+    #search-input::placeholder { color: var(--muted); }
+
+    #search-clear {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      display: none;
+      transition: color 0.2s;
+    }
+    #search-clear:hover { color: var(--ink); }
+    #search-clear.visible { display: block; }
+
+    #search-results {
+      max-height: 420px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold-dark) transparent;
+    }
+
+    .search-result-item {
+      padding: 0.85rem 1.1rem;
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      cursor: pointer;
+      transition: background 0.15s;
+      display: block;
+      text-decoration: none;
+    }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover, .search-result-item.focused {
+      background: rgba(201,168,76,0.08);
+    }
+
+    .result-section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-dark);
+      margin-bottom: 0.2rem;
+    }
+
+    .result-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+
+    .result-snippet {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .result-snippet mark {
+      background: rgba(201,168,76,0.3);
+      color: var(--ink);
+      border-radius: 2px;
+      padding: 0 2px;
+      font-weight: 400;
+    }
+
+    #search-empty {
+      padding: 2rem 1.1rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-style: italic;
+      display: none;
+    }
+
+    #search-footer {
+      display: flex;
+      gap: 1rem;
+      padding: 0.6rem 1.1rem;
+      border-top: 1px solid rgba(201,168,76,0.15);
+      background: rgba(26,20,16,0.02);
+    }
+
+    .search-hint {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+    }
+    .search-hint .kbd {
+      background: rgba(26,20,16,0.06);
+      border: 1px solid rgba(138,122,106,0.25);
+      border-radius: 3px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.6rem;
+    }
+
+    /* highlight in page */
+    .search-highlight {
+      background: rgba(201,168,76,0.35);
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+
     @media (max-width: 640px) {
       #main { padding-left: 1rem; padding-right: 1rem; }
       .hero { padding: 3rem 0 2.5rem; }
       .quran-verse .arabic { font-size: 1.15rem; }
+      #search-btn .kbd { display: none; }
+      #search-btn span:last-of-type { display: none; }
     }
   </style>
 </head>
@@ -676,6 +867,29 @@
     <span style="font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.05em;">Contents</span>
   </button>
   <div id="topbar-title">Understanding Islam — An Open Manuscript</div>
+  <button id="search-btn" onclick="openSearch()">
+    <span>🔍</span>
+    <span>Search</span>
+    <span class="kbd">⌘K</span>
+  </button>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" onclick="handleModalClick(event)">
+  <div id="search-box">
+    <div id="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="search-input" type="text" placeholder="Search the manuscript…" autocomplete="off" oninput="handleSearch(this.value)" onkeydown="handleSearchKeys(event)" />
+      <button id="search-clear" onclick="clearSearch()" title="Clear">✕</button>
+    </div>
+    <div id="search-results"></div>
+    <div id="search-empty">No results found — try different keywords.</div>
+    <div id="search-footer">
+      <span class="search-hint"><span class="kbd">↑↓</span> navigate</span>
+      <span class="search-hint"><span class="kbd">↵</span> jump to section</span>
+      <span class="search-hint"><span class="kbd">Esc</span> close</span>
+    </div>
+  </div>
 </div>
 
 <!-- SIDEBAR OVERLAY -->
@@ -1581,7 +1795,7 @@
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-  // Sidebar toggle
+  // ---- SIDEBAR ----
   function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
@@ -1599,43 +1813,210 @@
     document.getElementById('menu-icon').textContent = '☰';
   }
 
-  // Scroll to top button
+  // ---- SCROLL TO TOP ----
   window.addEventListener('scroll', () => {
-    const btn = document.getElementById('scroll-top');
-    btn.classList.toggle('visible', window.scrollY > 400);
+    document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
   });
 
-  // Intersection observer for fade-in
+  // ---- FADE IN ----
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.section, .part-title').forEach(el => observer.observe(el));
 
-  document.querySelectorAll('.section, .part-title').forEach(el => {
-    observer.observe(el);
-  });
-
-  // Active nav link highlighting
-  const sections = document.querySelectorAll('.section[id]');
+  // ---- ACTIVE NAV ----
+  const allSections = document.querySelectorAll('.section[id]');
   const navLinks = document.querySelectorAll('.nav-link');
-
   const navObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         navLinks.forEach(link => {
           link.classList.remove('active');
-          if (link.getAttribute('href') === '#' + entry.target.id) {
-            link.classList.add('active');
-          }
+          if (link.getAttribute('href') === '#' + entry.target.id) link.classList.add('active');
         });
       }
     });
   }, { threshold: 0.4 });
+  allSections.forEach(s => navObserver.observe(s));
 
-  sections.forEach(s => navObserver.observe(s));
+  // ---- SEARCH ENGINE ----
+  // Build index from DOM after load
+  let searchIndex = [];
+  let focusedIndex = -1;
+
+  function buildSearchIndex() {
+    searchIndex = [];
+    document.querySelectorAll('.section[id]').forEach(section => {
+      const id = section.id;
+      const numEl = section.querySelector('.section-number');
+      const h2 = section.querySelector('h2');
+      const sectionNum = numEl ? numEl.textContent.trim() : '';
+      const title = h2 ? h2.textContent.trim() : '';
+
+      // Gather all text content from the section (excluding nav/code)
+      const textNodes = [];
+      section.querySelectorAll('p, li, .callout, .translation, .glossary-def, .critique-response, .timeline-event').forEach(el => {
+        const t = el.textContent.trim();
+        if (t) textNodes.push(t);
+      });
+      const fullText = textNodes.join(' ');
+
+      searchIndex.push({ id, sectionNum, title, fullText });
+    });
+  }
+
+  function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function highlight(text, query) {
+    if (!query) return text;
+    const escaped = escapeRegex(query);
+    return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+  }
+
+  function getSnippet(text, query, snippetLen = 160) {
+    const lower = text.toLowerCase();
+    const idx = lower.indexOf(query.toLowerCase());
+    if (idx === -1) return text.slice(0, snippetLen) + (text.length > snippetLen ? '…' : '');
+    const start = Math.max(0, idx - 60);
+    const end = Math.min(text.length, idx + snippetLen - 60);
+    return (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+  }
+
+  function handleSearch(query) {
+    const clearBtn = document.getElementById('search-clear');
+    clearBtn.classList.toggle('visible', query.length > 0);
+
+    focusedIndex = -1;
+    const resultsEl = document.getElementById('search-results');
+    const emptyEl = document.getElementById('search-empty');
+
+    if (!query.trim()) {
+      resultsEl.innerHTML = '';
+      emptyEl.style.display = 'none';
+      return;
+    }
+
+    const q = query.trim().toLowerCase();
+    const matches = searchIndex.filter(item =>
+      item.title.toLowerCase().includes(q) ||
+      item.fullText.toLowerCase().includes(q) ||
+      item.sectionNum.toLowerCase().includes(q)
+    );
+
+    if (matches.length === 0) {
+      resultsEl.innerHTML = '';
+      emptyEl.style.display = 'block';
+      return;
+    }
+
+    emptyEl.style.display = 'none';
+
+    // Sort: title matches first
+    matches.sort((a, b) => {
+      const aTitle = a.title.toLowerCase().includes(q) ? 0 : 1;
+      const bTitle = b.title.toLowerCase().includes(q) ? 0 : 1;
+      return aTitle - bTitle;
+    });
+
+    resultsEl.innerHTML = matches.slice(0, 12).map((item, i) => {
+      const snippet = getSnippet(item.fullText, q);
+      const highlightedTitle = highlight(item.title, query.trim());
+      const highlightedSnippet = highlight(snippet, query.trim());
+      return `
+        <a class="search-result-item" data-target="#${item.id}" onclick="jumpTo('${item.id}')" tabindex="-1">
+          <div class="result-section-num">${item.sectionNum}</div>
+          <div class="result-title">${highlightedTitle}</div>
+          <div class="result-snippet">${highlightedSnippet}</div>
+        </a>`;
+    }).join('');
+  }
+
+  function jumpTo(id) {
+    closeSearch();
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Flash highlight
+        el.style.outline = '2px solid rgba(201,168,76,0.6)';
+        el.style.outlineOffset = '8px';
+        setTimeout(() => { el.style.outline = ''; el.style.outlineOffset = ''; }, 1800);
+      }
+    }, 150);
+  }
+
+  function handleSearchKeys(e) {
+    const items = document.querySelectorAll('.search-result-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      focusedIndex = Math.min(focusedIndex + 1, items.length - 1);
+      updateFocus(items);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      focusedIndex = Math.max(focusedIndex - 1, 0);
+      updateFocus(items);
+    } else if (e.key === 'Enter') {
+      if (focusedIndex >= 0 && items[focusedIndex]) {
+        items[focusedIndex].click();
+      } else if (items.length > 0) {
+        items[0].click();
+      }
+    } else if (e.key === 'Escape') {
+      closeSearch();
+    }
+  }
+
+  function updateFocus(items) {
+    items.forEach((item, i) => {
+      item.classList.toggle('focused', i === focusedIndex);
+      if (i === focusedIndex) item.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
+  function openSearch() {
+    buildSearchIndex();
+    document.getElementById('search-modal').classList.add('open');
+    setTimeout(() => document.getElementById('search-input').focus(), 50);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSearch() {
+    document.getElementById('search-modal').classList.remove('open');
+    document.getElementById('search-input').value = '';
+    document.getElementById('search-results').innerHTML = '';
+    document.getElementById('search-empty').style.display = 'none';
+    document.getElementById('search-clear').classList.remove('visible');
+    focusedIndex = -1;
+    document.body.style.overflow = '';
+  }
+
+  function clearSearch() {
+    document.getElementById('search-input').value = '';
+    document.getElementById('search-results').innerHTML = '';
+    document.getElementById('search-empty').style.display = 'none';
+    document.getElementById('search-clear').classList.remove('visible');
+    document.getElementById('search-input').focus();
+    focusedIndex = -1;
+  }
+
+  function handleModalClick(e) {
+    if (e.target === document.getElementById('search-modal')) closeSearch();
+  }
+
+  // Keyboard shortcut: Cmd/Ctrl + K
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      const modal = document.getElementById('search-modal');
+      if (modal.classList.contains('open')) closeSearch();
+      else openSearch();
+    }
+    if (e.key === 'Escape' && document.getElementById('search-modal').classList.contains('open')) {
+      closeSearch();
+    }
+  });
 </script>
 </body>
 </html>
