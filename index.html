@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Understanding Islam — An Open Manuscript</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Playfair Display', 'Georgia', 'serif'],
+            body: ['Crimson Pro', 'Georgia', 'serif'],
+            mono: ['DM Mono', 'monospace'],
+          },
+          colors: {
+            ink: '#1a1410',
+            parchment: '#f7f3ec',
+            warm: '#e8dfc8',
+            gold: '#c9a84c',
+            'gold-light': '#e8c97a',
+            'gold-dark': '#8a6d1f',
+            rust: '#8b3a2a',
+            sage: '#4a5e4e',
+            muted: '#8a7a6a',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --ink: #1a1410;
+      --parchment: #f7f3ec;
+      --warm: #e8dfc8;
+      --gold: #c9a84c;
+      --gold-dark: #8a6d1f;
+      --rust: #8b3a2a;
+      --sage: #4a5e4e;
+      --muted: #8a7a6a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--parchment);
+      color: var(--ink);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    /* Subtle paper texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ---- SIDEBAR NAV ---- */
+    #sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 280px;
+      background: var(--ink);
+      color: var(--warm);
+      overflow-y: auto;
+      z-index: 100;
+      transform: translateX(-100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold-dark) transparent;
+    }
+    #sidebar.open { transform: translateX(0); }
+
+    #sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,20,16,0.5);
+      z-index: 99;
+      backdrop-filter: blur(2px);
+    }
+    #sidebar-overlay.open { display: block; }
+
+    .sidebar-header {
+      padding: 2rem 1.5rem 1rem;
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .sidebar-subtitle {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .nav-part {
+      padding: 0.75rem 1.5rem 0.25rem;
+    }
+
+    .nav-part-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.85rem;
+      color: rgba(232,223,200,0.7);
+      border-radius: 3px;
+      transition: all 0.2s;
+      cursor: pointer;
+      font-family: 'Crimson Pro', serif;
+      font-weight: 300;
+      line-height: 1.4;
+      text-decoration: none;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--gold-light);
+      background: rgba(201,168,76,0.08);
+      padding-left: 1.25rem;
+    }
+
+    /* ---- TOP BAR ---- */
+    #topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 52px;
+      background: rgba(247,243,236,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(201,168,76,0.25);
+      z-index: 98;
+      display: flex;
+      align-items: center;
+      padding: 0 1.25rem;
+      gap: 1rem;
+    }
+
+    #menu-btn {
+      background: none;
+      border: 1px solid rgba(201,168,76,0.4);
+      color: var(--ink);
+      padding: 0.4rem 0.65rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    #menu-btn:hover { background: rgba(201,168,76,0.12); }
+
+    #topbar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      color: var(--ink);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      flex: 1;
+    }
+
+    /* ---- MAIN CONTENT ---- */
+    #main {
+      padding-top: 52px;
+      max-width: 780px;
+      margin: 0 auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      padding: 5rem 0 3.5rem;
+      border-bottom: 1px solid rgba(201,168,76,0.3);
+      position: relative;
+    }
+
+    .hero-ornament {
+      color: var(--gold);
+      font-size: 2rem;
+      letter-spacing: 0.3em;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      opacity: 0.6;
+    }
+
+    .hero-bismillah {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-sub {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      font-weight: 300;
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      border: 1px solid rgba(138,122,106,0.3);
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+    }
+
+    /* ---- PARTS / SECTIONS ---- */
+    .part-divider {
+      margin: 4rem 0 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .part-divider::before, .part-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201,168,76,0.4), transparent);
+    }
+
+    .part-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold-dark);
+      white-space: nowrap;
+    }
+
+    .part-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+      line-height: 1.2;
+    }
+
+    .part-intro {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+      border-left: 2px solid rgba(201,168,76,0.4);
+      padding-left: 1rem;
+    }
+
+    /* ---- SECTION ---- */
+    .section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 70px;
+    }
+
+    .section-number {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.4rem;
+    }
+
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .section p {
+      margin-bottom: 1rem;
+      color: #2d2520;
+      font-weight: 300;
+    }
+
+    /* ---- QURANIC VERSE ---- */
+    .quran-verse {
+      margin: 1.75rem 0;
+      background: rgba(201,168,76,0.06);
+      border-left: 3px solid var(--gold);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 4px 4px 0;
+      position: relative;
+    }
+
+    .quran-verse::before {
+      content: '❝';
+      position: absolute;
+      top: -0.6rem;
+      left: 1rem;
+      font-size: 1.5rem;
+      color: var(--gold);
+      opacity: 0.5;
+      font-family: Georgia, serif;
+    }
+
+    .quran-verse .arabic {
+      font-size: 1.35rem;
+      text-align: right;
+      direction: rtl;
+      color: var(--ink);
+      line-height: 2.2;
+      margin-bottom: 0.75rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .quran-verse .translation {
+      font-style: italic;
+      color: #3a2e26;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .quran-verse .verse-ref {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.75rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--gold-dark);
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(138,109,31,0.4);
+      transition: all 0.2s;
+    }
+    .quran-verse .verse-ref:hover {
+      color: var(--rust);
+      border-bottom-color: var(--rust);
+    }
+    .quran-verse .verse-ref::after {
+      content: '↗';
+      font-size: 0.65rem;
+    }
+
+    /* ---- BULLET LISTS ---- */
+    .section ul {
+      list-style: none;
+      margin: 0.75rem 0 1rem;
+    }
+
+    .section ul li {
+      padding: 0.2rem 0 0.2rem 1.5rem;
+      position: relative;
+      color: #2d2520;
+      font-weight: 300;
+    }
+
+    .section ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-weight: 400;
+    }
+
+    /* Sub-bullets */
+    .section ul ul li::before { content: '·'; left: 0.1rem; }
+
+    /* ---- CALLOUT BOXES ---- */
+    .callout {
+      background: rgba(26,20,16,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 4px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+
+    .callout-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .callout.note { border-left: 3px solid var(--sage); }
+    .callout.warning { border-left: 3px solid var(--rust); }
+    .callout.definition { border-left: 3px solid var(--gold); }
+
+    /* ---- TABLE ---- */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      border-radius: 4px;
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    thead tr {
+      background: rgba(26,20,16,0.06);
+    }
+
+    th {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-dark);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+    }
+
+    td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      color: #2d2520;
+      font-weight: 300;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(201,168,76,0.04); }
+
+    /* ---- TIMELINE ---- */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      margin: 1rem 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.5rem;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.1));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 0.85rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+
+    .timeline-item:hover { background: rgba(201,168,76,0.06); }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--parchment);
+    }
+
+    .timeline-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--gold-dark);
+      font-weight: 400;
+    }
+
+    .timeline-event {
+      font-size: 0.95rem;
+      color: #2d2520;
+      font-weight: 300;
+    }
+
+    /* ---- CRITIQUE/RESPONSE BLOCKS ---- */
+    .critique-block {
+      margin: 1.25rem 0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .critique-header {
+      background: rgba(139,58,42,0.08);
+      border-left: 3px solid var(--rust);
+      padding: 0.65rem 1rem;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--rust);
+      font-size: 1rem;
+    }
+
+    .critique-header .critique-label {
+      font-family: 'DM Mono', monospace;
+      font-style: normal;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.25rem;
+      opacity: 0.7;
+    }
+
+    .critique-response {
+      background: rgba(74,94,78,0.05);
+      border-left: 3px solid var(--sage);
+      padding: 0.85rem 1rem;
+      font-size: 0.95rem;
+      color: #2d2520;
+      font-weight: 300;
+    }
+
+    /* ---- GLOSSARY ---- */
+    .glossary-entry {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .glossary-entry:last-child { border-bottom: none; }
+
+    .glossary-term {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .glossary-arabic {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-left: 0.5rem;
+    }
+
+    .glossary-def {
+      font-size: 0.95rem;
+      color: #3a2e26;
+      margin-top: 0.25rem;
+      font-weight: 300;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      margin-top: 5rem;
+      padding: 2rem 0 3rem;
+      border-top: 1px solid rgba(201,168,76,0.25);
+      text-align: center;
+    }
+
+    footer .footer-ornament {
+      color: var(--gold);
+      font-size: 1.5rem;
+      letter-spacing: 0.4em;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ---- SCROLL TO TOP ---- */
+    #scroll-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 1.5rem;
+      width: 40px; height: 40px;
+      background: var(--ink);
+      color: var(--gold);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      z-index: 200;
+    }
+    #scroll-top.visible { opacity: 1; transform: translateY(0); }
+    #scroll-top:hover { background: var(--gold-dark); color: var(--parchment); }
+
+    /* ---- ANIMATIONS ---- */
+    .section {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .section.visible { opacity: 1; transform: translateY(0); }
+
+    .part-title {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .part-title.visible { opacity: 1; transform: translateY(0); }
+
+    /* Arabic font override */
+    .arabic-text {
+      font-family: 'Playfair Display', serif;
+      direction: rtl;
+    }
+
+    @media (max-width: 640px) {
+      #main { padding-left: 1rem; padding-right: 1rem; }
+      .hero { padding: 3rem 0 2.5rem; }
+      .quran-verse .arabic { font-size: 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <button id="menu-btn" onclick="toggleSidebar()">
+    <span id="menu-icon">☰</span>
+    <span style="font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.05em;">Contents</span>
+  </button>
+  <div id="topbar-title">Understanding Islam — An Open Manuscript</div>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Table of Contents</div>
+    <div class="sidebar-subtitle">Open Manuscript · Islamic Studies</div>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Part 0</div>
+    <a class="nav-link" href="#part0" onclick="closeSidebar()">Methodology</a>
+    <a class="nav-link" href="#s0-1" onclick="closeSidebar()">0.1 Purpose</a>
+    <a class="nav-link" href="#s0-2" onclick="closeSidebar()">0.2 Epistemology</a>
+    <a class="nav-link" href="#s0-3" onclick="closeSidebar()">0.3 Rules of Interpretation</a>
+    <a class="nav-link" href="#s0-4" onclick="closeSidebar()">0.4 Argumentation Framework</a>
+    <a class="nav-link" href="#s0-5" onclick="closeSidebar()">0.5 Sources Hierarchy</a>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Part 1</div>
+    <a class="nav-link" href="#part1" onclick="closeSidebar()">Foundations of Islam</a>
+    <a class="nav-link" href="#s1-1" onclick="closeSidebar()">1.1 Concept of God (Tawheed)</a>
+    <a class="nav-link" href="#s1-2" onclick="closeSidebar()">1.2 Prophethood</a>
+    <a class="nav-link" href="#s1-3" onclick="closeSidebar()">1.3 Preservation of Scripture</a>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Part 2</div>
+    <a class="nav-link" href="#part2" onclick="closeSidebar()">Textual Studies</a>
+    <a class="nav-link" href="#s2-1" onclick="closeSidebar()">2.1 Qur'anic Transmission</a>
+    <a class="nav-link" href="#s2-2" onclick="closeSidebar()">2.2 Arabic Language</a>
+    <a class="nav-link" href="#s2-3" onclick="closeSidebar()">2.3 Hadith Sciences</a>
+    <a class="nav-link" href="#s2-4" onclick="closeSidebar()">2.4 Qirā'āt System</a>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Part 3</div>
+    <a class="nav-link" href="#part3" onclick="closeSidebar()">Ethical &amp; Social</a>
+    <a class="nav-link" href="#s3-1" onclick="closeSidebar()">3.1 Marriage of Aisha</a>
+    <a class="nav-link" href="#s3-2" onclick="closeSidebar()">3.2 Women in Islamic Law</a>
+    <a class="nav-link" href="#s3-3" onclick="closeSidebar()">3.3 War-related Verses</a>
+    <a class="nav-link" href="#s3-4" onclick="closeSidebar()">3.4 Slavery in Islamic History</a>
+    <a class="nav-link" href="#s3-5" onclick="closeSidebar()">3.5 Polygyny</a>
+    <a class="nav-link" href="#s3-6" onclick="closeSidebar()">3.6 Sharia Law</a>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Part 4</div>
+    <a class="nav-link" href="#part4" onclick="closeSidebar()">Comparative Religion</a>
+    <a class="nav-link" href="#s4-1" onclick="closeSidebar()">4.1 Christianity: Textual History</a>
+    <a class="nav-link" href="#s4-2" onclick="closeSidebar()">4.2 Trinity Logic Analysis</a>
+    <a class="nav-link" href="#s4-3" onclick="closeSidebar()">4.3 Jesus in Historical Context</a>
+    <a class="nav-link" href="#s4-4" onclick="closeSidebar()">4.4 Judaism Overview</a>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Part 5</div>
+    <a class="nav-link" href="#part5" onclick="closeSidebar()">Philosophical Challenges</a>
+    <a class="nav-link" href="#s5-1" onclick="closeSidebar()">5.1 Problem of Evil</a>
+    <a class="nav-link" href="#s5-2" onclick="closeSidebar()">5.2 Fine-Tuning</a>
+    <a class="nav-link" href="#s5-3" onclick="closeSidebar()">5.3 Consciousness</a>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Part 6</div>
+    <a class="nav-link" href="#part6" onclick="closeSidebar()">Modern Criticisms</a>
+    <a class="nav-link" href="#s6-1" onclick="closeSidebar()">6.1 Social Media Arguments</a>
+    <a class="nav-link" href="#s6-2" onclick="closeSidebar()">6.2 Weak Muslim Responses</a>
+    <a class="nav-link" href="#s6-3" onclick="closeSidebar()">6.3 Strong Response Method</a>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Part 7</div>
+    <a class="nav-link" href="#part7" onclick="closeSidebar()">Practical Dawah Ethics</a>
+    <a class="nav-link" href="#s7-1" onclick="closeSidebar()">7.1 Respectful Speech</a>
+    <a class="nav-link" href="#s7-2" onclick="closeSidebar()">7.2 When Not to Debate</a>
+    <a class="nav-link" href="#s7-3" onclick="closeSidebar()">7.3 Handling Hostility</a>
+    <a class="nav-link" href="#s7-4" onclick="closeSidebar()">7.4 Intellectual vs Emotional</a>
+  </div>
+
+  <div class="nav-part">
+    <div class="nav-part-label">Appendices</div>
+    <a class="nav-link" href="#appendix-a" onclick="closeSidebar()">A. Glossary</a>
+    <a class="nav-link" href="#appendix-b" onclick="closeSidebar()">B. Hadith Grading</a>
+    <a class="nav-link" href="#appendix-c" onclick="closeSidebar()">C. Bibliography</a>
+    <a class="nav-link" href="#appendix-d" onclick="closeSidebar()">D. Timeline</a>
+  </div>
+
+  <div style="height:2rem;"></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-ornament">✦ ✦ ✦</div>
+    <div class="hero-bismillah">
+      بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ<br>
+      <span style="font-size:0.85rem;">In the Name of Allah, the Most Beneficent, the Most Merciful</span>
+    </div>
+    <h1>Understanding Islam</h1>
+    <p class="hero-sub">An open manuscript for Muslims seeking to engage with common questions, criticisms, and comparative discussions about their faith.</p>
+    <div class="hero-meta">
+      <span class="hero-badge">📖 Open Source</span>
+      <span class="hero-badge">🔓 No Login Required</span>
+      <span class="hero-badge">✦ 8 Parts</span>
+      <span class="hero-badge">📚 30+ Sections</span>
+    </div>
+    <div style="margin-top:1.75rem; padding:1rem 1.25rem; background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.2); border-radius:4px; font-size:0.88rem; color:var(--muted); text-align:center;">
+      <strong style="color:var(--ink); font-family:'Playfair Display',serif;">A note from the author:</strong> This is a personal effort — not a claim of authority. Any errors are unintentional and open to correction based on authentic sources. Approach this as a developing document.
+    </div>
+  </header>
+
+  <!-- ======================== PART 0 ======================== -->
+  <div id="part0">
+    <div class="part-divider"><span class="part-label">Part 0</span></div>
+    <div class="part-title visible">Methodology</div>
+    <p class="part-intro">Foundational principles governing how truth, evidence, and religious claims are evaluated throughout this work.</p>
+  </div>
+
+  <div class="section" id="s0-1">
+    <div class="section-number">0.1</div>
+    <h2>Purpose of This Work</h2>
+    <p>This work is written as a personal effort from a fellow Muslim brother who hopes to contribute to a clearer understanding of Islam and its teachings. It is not in any way a claim of authority or a replacement for scholars or institutions of knowledge.</p>
+    <p>The main motivation comes from observing a common issue: many Muslims today, especially online, struggle to accurately respond to common criticisms and questions about their faith. This very often leads to weak arguments and emotional responses that don't reflect the depth of Islamic tradition.</p>
+    <p>No personal gain is sought. There is no claim of superiority, fame, or authority intended. The hope is simply that this work may be beneficial for those who sincerely wish to understand and learn.</p>
+    <div class="callout note">
+      <div class="callout-label">Important</div>
+      This work should be approached as a developing document. It is not final, nor is it perfect in any way. Any errors are unintentional and open to correction based on authentic sources.
+    </div>
+  </div>
+
+  <div class="section" id="s0-2">
+    <div class="section-number">0.2</div>
+    <h2>Epistemology</h2>
+    <p>This section defines the basic principles used throughout this work when evaluating truth, evidence, and religious claims. Human knowledge is generally derived from multiple sources:</p>
+    <ul>
+      <li>Sense perception (what can be observed)</li>
+      <li>Reason and logic (what can be inferred consistently)</li>
+      <li>Historical testimony (what is reported through reliable transmission)</li>
+      <li>Revelation (as understood within religious tradition)</li>
+    </ul>
+    <p>Each of these sources has limits, and none should be used in isolation when dealing with complex theological or historical questions.</p>
+    <p>Reason is the human capacity to consciously apply logic, analyze information, and draw valid conclusions to seek truth and solve problems. However, reason alone doesn't always provide complete knowledge of historical events. Reason is therefore used in this work as a tool for evaluating arguments and identifying contradictions — not as a replacement for all forms of transmitted knowledge.</p>
+    <p>Many religious and historical claims rely on testimony rather than direct observation. Testimonies are considered reliable when transmitted through consistent chains, not contradicted by stronger evidence, and aligned with established historical context.</p>
+  </div>
+
+  <div class="section" id="s0-3">
+    <div class="section-number">0.3</div>
+    <h2>Rules of Interpretation</h2>
+    <p>Misinterpretation often occurs not because of lack of information, but because of incorrect interpretive methods. The following principles apply throughout this work:</p>
+    <ul>
+      <li>No statement should be interpreted in isolation — any text must be understood through its surrounding passage, historical circumstances, intended audience, and linguistic environment</li>
+      <li>Words do not always have one fixed meaning, especially in a classical language like Arabic — translations are treated as approximations rather than absolute representations</li>
+      <li>In modern online discussions, texts are often shortened without context, translated inaccurately, or presented without background information — this must always be accounted for</li>
+    </ul>
+  </div>
+
+  <div class="section" id="s0-4">
+    <div class="section-number">0.4</div>
+    <h2>Argumentation Framework</h2>
+    <p>An argument can be broken down into three major components: premises, inferences, and a conclusion. A weakness in any of these three components affects the strength of the argument as a whole.</p>
+    <p>A distinction must be made between <strong>validity</strong> and <strong>soundness</strong>:</p>
+    <div class="callout definition">
+      <div class="callout-label">Definition</div>
+      <strong>Validity:</strong> If all the premises were true, the conclusion must be true.<br><br>
+      <strong>Soundness:</strong> The argument is valid, <em>and</em> all the premises are true.
+    </div>
+    <p>Many online religious arguments fail due to incorrect reasoning patterns. Common logical fallacies to avoid:</p>
+    <ul>
+      <li><strong>Strawman:</strong> misrepresenting or exaggerating an opponent's argument to make it easier to attack</li>
+      <li><strong>Cherry-picking:</strong> pointing to specific favorable examples while deliberately ignoring contradictory or wider context</li>
+      <li><strong>Special pleading:</strong> applying a general rule to others while claiming an unjustified exemption for one's own position</li>
+      <li><strong>False equivalence:</strong> drawing an equivalence between two subjects based on flawed or faulty reasoning</li>
+      <li><strong>Appeal to emotion:</strong> manipulating an audience's feelings to persuade, rather than using valid logic or factual evidence</li>
+      <li><strong>Argument from ignorance:</strong> believing a claim is true simply because it hasn't been proven false, or vice versa</li>
+    </ul>
+    <div class="callout warning">
+      <div class="callout-label">Caution</div>
+      Debate is not always a reliable method for discovering truth. It can be heavily influenced by rhetorical skill, audience bias, emotional framing, and selective presentation of information.
+    </div>
+  </div>
+
+  <div class="section" id="s0-5">
+    <div class="section-number">0.5</div>
+    <h2>Sources Hierarchy</h2>
+    <p>Within Islamic studies, the highest level of authority is given to:</p>
+    <ul>
+      <li>The Qur'an as the central textual source</li>
+      <li>Mutawātir narrations (mass-transmitted reports)</li>
+      <li>Well-authenticated hadith with strong chains (according to hadith methodology)</li>
+    </ul>
+    <p>Secondary religious sources include tafsīr literature, seerah, fiqh, and scholarly consensus (ijmāʿ) where clearly established. These are important for interpretation but are dependent on primary texts for authority.</p>
+    <p>Weak or unreliable sources include: anonymous internet claims, unsourced social media arguments, selectively edited quotations, and out-of-context screenshots. These may be acknowledged but are not treated as reliable foundations for conclusions.</p>
+    <div class="callout note">
+      <div class="callout-label">Principle</div>
+      No tradition is exempt from critical analysis, and no tradition is unfairly dismissed without reasoned criteria.
+    </div>
+  </div>
+
+  <!-- ======================== PART 1 ======================== -->
+  <div id="part1">
+    <div class="part-divider"><span class="part-label">Part 1</span></div>
+    <div class="part-title">Foundations of Islam</div>
+    <p class="part-intro">Core theological concepts that form the basis of Islamic belief and practice.</p>
+  </div>
+
+  <div class="section" id="s1-1">
+    <div class="section-number">1.1</div>
+    <h2>Concept of God — Tawḥīd</h2>
+    <p>Tawḥīd, in Islam, means to worship and believe in one God — Allah alone — believing in all His attributes and divinity. One of the five pillars of Islam is to testify that there is no god but Allah and that Muhammad is the Messenger of Allah, which illustrates just how central Tawḥīd is to Islamic faith.</p>
+    <p>A key principle in Islamic theology is that God is fundamentally unlike creation. This implies:</p>
+    <ul>
+      <li>God is not bound by any physical limitations</li>
+      <li>God is not subject to time or space in the way creation is</li>
+      <li>Human imagination cannot fully encompass divine reality</li>
+    </ul>
+    <div class="quran-verse">
+      <div class="arabic">قُلْ مَن يَرْزُقُكُم مِّنَ ٱلسَّمَآءِ وَٱلْأَرْضِ أَمَّن يَمْلِكُ ٱلسَّمْعَ وَٱلْأَبْصَـٰرَ وَمَن يُخْرِجُ ٱلْحَىَّ مِنَ ٱلْمَيِّتِ وَيُخْرِجُ ٱلْمَيِّتَ مِنَ ٱلْحَىِّ وَمَن يُدَبِّرُ ٱلْأَمْرَ ۚ فَسَيَقُولُونَ ٱللَّهُ ۚ فَقُلْ أَفَلَا تَتَّقُونَ</div>
+      <div class="translation">Ask ˹them, O Prophet˺, "Who provides for you from heaven and earth? Who owns ˹your˺ hearing and sight? Who brings forth the living from the dead and the dead from the living? And who conducts every affair?" They will ˹surely˺ say, "Allah." Say, "Will you not then fear ˹Him˺?"</div>
+      <a class="verse-ref" href="https://quran.com/10?startingVerse=31" target="_blank" rel="noopener">Qur'an 10:31</a>
+    </div>
+  </div>
+
+  <div class="section" id="s1-2">
+    <div class="section-number">1.2</div>
+    <h2>Prophethood</h2>
+    <p>In Islamic theology, a prophet is a human being chosen by God to convey divine guidance to people. A prophet is not understood as a divine being or an object of worship — rather as a Messenger who communicates revelation while remaining fully human.</p>
+    <p>Within Islamic understanding, prophets are identified through a combination of:</p>
+    <ul>
+      <li>Truthfulness and integrity of character</li>
+      <li>Consistency in message over time</li>
+      <li>Absence of contradiction in core claims</li>
+      <li>Support from signs or miracles (as described in tradition)</li>
+      <li>Acceptance by a community over time</li>
+    </ul>
+    <p>A prophet's authority is grounded in revelation, not personal opinion. Revelation is understood as knowledge transmitted from God, not subject to personal desires or inventions. Miracles are understood as extraordinary events granted by God to support the truthfulness of a prophet — they are signs, not performed independently by the prophet.</p>
+    <p>Islamic theology holds that prophethood reaches its completion with the final messenger, the Prophet Muhammad ﷺ.</p>
+  </div>
+
+  <div class="section" id="s1-3">
+    <div class="section-number">1.3</div>
+    <h2>Preservation of Scripture</h2>
+    <p>In Islamic theology, preservation does not refer only to written manuscripts, but to a combined system of transmission that includes:</p>
+    <ul>
+      <li>Memorization (ḥifẓ)</li>
+      <li>Oral recitation</li>
+      <li>Written documentation</li>
+    </ul>
+    <p>It is estimated that millions of people worldwide have completely memorized the Qur'an, with estimates based on records of formal certifications (Ijāzah) and Islamic educational institutions globally.</p>
+    <p>Alongside oral preservation, written records were produced during the early period of revelation. These include fragments written during the lifetime of the Prophet ﷺ, compiled collections under early leadership, and standardized codices for distribution. Written preservation functioned as a support system to oral transmission.</p>
+    <p>At an early stage, the text was standardized to ensure consistency across different regions — to prevent dialectical confusion, unify recitation practices, and preserve textual integrity.</p>
+  </div>
+
+  <!-- ======================== PART 2 ======================== -->
+  <div id="part2">
+    <div class="part-divider"><span class="part-label">Part 2</span></div>
+    <div class="part-title">Textual Studies</div>
+    <p class="part-intro">Examining the transmission, language, and authentication methods of Islamic primary sources.</p>
+  </div>
+
+  <div class="section" id="s2-1">
+    <div class="section-number">2.1</div>
+    <h2>Qur'anic Transmission</h2>
+    <p>The Qur'anic message was transmitted during its initial revelation period through both oral recitation in communal settings and written notes recorded by scribes. These two methods functioned simultaneously, with oral transmission remaining primary.</p>
+    <p>From the earliest period, memorization played a central role in preservation, creating multiple independent transmission lines within the same generation.</p>
+    <p>Written materials were produced during the lifetime of the Prophet ﷺ in various forms:</p>
+    <ul>
+      <li>Fragments on available writing materials</li>
+      <li>Personal copies held by individuals</li>
+      <li>Recordings kept by designated scribes</li>
+    </ul>
+    <p>After the passing of the Prophet ﷺ, the Qur'an was compiled into a unified manuscript form under early leadership. This process aimed to gather scattered written materials, verify content through memorizers, ensure consistency of transmission, and prevent loss of material due to the passing of early memorizers.</p>
+    <p>Early manuscripts are studied as historical artifacts. Key observations include early writing styles lacking full vocalization marks, minor orthographic differences typical of early Arabic script, and general consistency in core textual structure.</p>
+  </div>
+
+  <div class="section" id="s2-2">
+    <div class="section-number">2.2</div>
+    <h2>Arabic Language — A Deep Dive</h2>
+    <p>Classical Arabic is a root-based language system. Most words are derived from three-letter roots (sometimes four), with contextual usage shaping nuance. Meaning is carried through root relationships, not isolated words.</p>
+    <p>A single Arabic term can carry multiple related meanings depending on context, making words not always one-to-one translatable into English. This creates potential for misunderstanding when texts are translated without linguistic analysis.</p>
+    <p>Arabic grammar plays a central role in meaning. Two major linguistic sciences include:</p>
+    <ul>
+      <li><strong>Naḥw</strong> — syntax and sentence structure</li>
+      <li><strong>Ṣarf</strong> — word formation and morphology</li>
+    </ul>
+    <p>A distinction exists between classical Arabic (used in early texts and scripture) and Modern Standard Arabic (used in contemporary communication). While related, they differ in vocabulary usage, idiomatic expressions, and stylistic conventions. This distinction is important when analyzing older texts.</p>
+    <p>Arabic, like other languages, contains both literal and figurative expression. Determining meaning depends on contextual indicators and usage patterns in classical literature — not all expressions are intended to be understood in a purely literal sense.</p>
+  </div>
+
+  <div class="section" id="s2-3">
+    <div class="section-number">2.3</div>
+    <h2>Hadith Sciences</h2>
+    <p>Hadith is the Arabic word for a "report" or "account" and refers to the Islamic oral tradition of anecdotes containing the purported words, actions, and silent approvals of the Prophet Muhammad ﷺ or his immediate circle. These reports are not all treated equally — they are subject to systematic evaluation.</p>
+    <p>A hadith is generally composed of two parts:</p>
+    <ul>
+      <li><strong>Isnād:</strong> the chain of transmission (narrators)</li>
+      <li><strong>Matn:</strong> the actual content of the report</li>
+    </ul>
+    <p>The chain of narrators is a central feature of authentication. Each narrator in the chain is evaluated based on reliability, memory accuracy, moral integrity, and consistency with other narrations.</p>
+    <div class="callout definition">
+      <div class="callout-label">Hadith Grading Levels</div>
+      <strong>Ṣaḥīḥ (Authentic):</strong> Strong chain and reliable content<br>
+      <strong>Ḥasan (Good):</strong> Acceptable reliability with minor limitations<br>
+      <strong>Ḍaʿīf (Weak):</strong> Issues in chain or content reliability<br>
+      <strong>Mawḍūʿ (Fabricated):</strong> Identified as falsely attributed
+    </div>
+    <p>A hadith is generally considered authentic when the chain is continuous with no missing narrators, all narrators are reliable and precise, and the report is not contradictory to stronger evidence. A specialized discipline exists to assess narrators individually — evaluating trustworthiness (ʿadālah), accuracy of memory (ḍabt), and consistency in transmission.</p>
+  </div>
+
+  <div class="section" id="s2-4">
+    <div class="section-number">2.4</div>
+    <h2>Qirā'āt System</h2>
+    <p>Qirāʾāt refers to the different recognized modes of reciting the Qur'an that have been transmitted through authentic chains. They are not independent versions of the Qur'an.</p>
+    <p>The variations found in Qirāʾāt generally include pronunciation differences, slight grammatical variations, and differences in articulation or dialectal form. Their existence serves several functions:</p>
+    <ul>
+      <li>Reflecting linguistic diversity in early Arabic dialects</li>
+      <li>Facilitating ease of recitation for different communities</li>
+      <li>Preserving flexibility within authentic transmission</li>
+    </ul>
+    <p>They are understood as complementary, not contradictory. In modern discussions, Qirāʾāt are sometimes incorrectly described as conflicting versions of the Qur'an, evidence of textual instability, or later additions and alterations. Within Islamic tradition, they are instead understood as structured variations within a unified textual framework.</p>
+  </div>
+
+  <!-- ======================== PART 3 ======================== -->
+  <div id="part3">
+    <div class="part-divider"><span class="part-label">Part 3</span></div>
+    <div class="part-title">Ethical &amp; Social Objections</div>
+    <p class="part-intro">Addressing common critiques related to Islamic history, law, and social structures through contextual analysis.</p>
+  </div>
+
+  <div class="section" id="s3-1">
+    <div class="section-number">3.1</div>
+    <h2>Marriage of Aisha — Historical Analysis</h2>
+    <div class="callout note">
+      <div class="callout-label">Methodological Note</div>
+      Historical events must first be evaluated within the moral, social, and legal context of their own time before applying modern frameworks. This does not mean all past actions are automatically justified — but anachronistic analysis produces category errors.
+    </div>
+    <p>This discussion is primarily based on narrations in early hadith collections, including reports attributed to ʿĀ'ishah herself — such as the report in Ṣaḥīḥ al-Bukhārī stating she was married at six and the marriage was consummated at nine.</p>
+    <p>Key contextual factors to consider:</p>
+    <ul>
+      <li>Modern legal categories (state-defined age laws, psychological maturity standards) did not exist in the same form in 7th-century Arabia</li>
+      <li>Marriage structures were often based on family contracts and social maturity indicators rather than fixed numeric age thresholds</li>
+      <li>Similar marriage-age patterns existed across multiple ancient societies — Byzantine, Persian, Jewish, and tribal Arabian contexts</li>
+    </ul>
+    <p>Historical analysis requires comparing practices with their contemporary baseline, not solely through modern legal standards. A clear distinction must be maintained between descriptive historical reality (what happened in that time) and modern normative frameworks (how society today defines acceptable practice). Conflating the two produces category errors in analysis.</p>
+  </div>
+
+  <div class="section" id="s3-2">
+    <div class="section-number">3.2</div>
+    <h2>Women in Islamic Law</h2>
+    <p>Islamic legal theory distinguishes between spiritual/moral equality and functional legal differentiation. A foundational textual basis for moral equality:</p>
+    <div class="quran-verse">
+      <div class="translation">"Surely the most noble of you in the sight of Allah is the most righteous among you."</div>
+      <a class="verse-ref" href="https://quran.com/49?startingVerse=13" target="_blank" rel="noopener">Qur'an 49:13</a>
+    </div>
+    <p>This establishes that moral worth is not based on gender, but on conduct and piety. Islamic law assigns different legal responsibilities in certain domains, based on structured social roles rather than a hierarchy of worth.</p>
+    <p>Key distinctions in Islamic law:</p>
+    <ul>
+      <li>Men are obligated to provide financial maintenance (nafaqah) for family dependents</li>
+      <li>Women retain independent financial ownership of their wealth</li>
+      <li>A woman is not legally required to spend her income on household obligations</li>
+    </ul>
+    <p>Regarding inheritance, the Qur'an states:</p>
+    <div class="quran-verse">
+      <div class="translation">"Allah commands you regarding your children: the share of the male will be twice that of the female."</div>
+      <a class="verse-ref" href="https://quran.com/4?startingVerse=11" target="_blank" rel="noopener">Qur'an 4:11</a>
+    </div>
+    <p>Classical Islamic jurisprudence links this ruling to the financial responsibility placed on males and the absence of obligatory financial burden on females.</p>
+
+    <div class="critique-block">
+      <div class="critique-header"><div class="critique-label">Common Critique A</div>"Islam is unequal to women"</div>
+      <div class="critique-response">This claim is often based on selective comparison of legal rulings without considering differing legal responsibilities, financial obligations assigned to men, and structured role distribution in classical law.</div>
+    </div>
+
+    <div class="critique-block">
+      <div class="critique-header"><div class="critique-label">Common Critique B</div>"A woman's testimony is worth less because of gender"</div>
+      <div class="critique-response">This argument arises from misunderstanding the specific legal context of Qur'an 2:282, which deals with a particular financial transaction context, and generalizing a narrow procedural rule into all legal settings — an error in both scope and application.</div>
+    </div>
+
+    <div class="critique-block">
+      <div class="critique-header"><div class="critique-label">Common Critique C</div>"Inheritance rules favor men"</div>
+      <div class="critique-response">This is based on arithmetic comparison without context of mandatory financial responsibility on male relatives and the complete absence of compulsory financial burden on women.</div>
+    </div>
+
+    <div class="critique-block">
+      <div class="critique-header"><div class="critique-label">Common Critique D</div>"Islam restricts women's agency"</div>
+      <div class="critique-response">This claim often ignores legal ownership rights of women in Islamic law, independent financial identity, and the historical context of pre-Islamic Arabian norms where women had little to no legal protections. Islamic legal reforms granted formal inheritance rights, property ownership recognition, and regulated marriage contract rights.</div>
+    </div>
+  </div>
+
+  <div class="section" id="s3-3">
+    <div class="section-number">3.3</div>
+    <h2>War-Related Verses</h2>
+    <p>Many Qur'anic verses related to warfare were revealed in specific historical circumstances — periods of armed conflict involving early Muslim communities, defensive military engagement after persecution and displacement, and in response to treaty violations by opposing groups.</p>
+    <p>Classical Islamic jurisprudence distinguishes between:</p>
+    <ul>
+      <li>Defensive warfare (response to attack or persecution)</li>
+      <li>Regulated conflict under state authority</li>
+      <li>Non-combatant protection principles</li>
+    </ul>
+    <p>A frequently cited verse:</p>
+    <div class="quran-verse">
+      <div class="translation">"Fight in the cause of Allah ˹only˺ against those who wage war against you, but do not exceed the limits. Allah does not like transgressors."</div>
+      <a class="verse-ref" href="https://quran.com/2?startingVerse=190" target="_blank" rel="noopener">Qur'an 2:190</a>
+    </div>
+    <div class="callout warning">
+      <div class="callout-label">Common Misquotation</div>
+      This verse is frequently taken out of context as "Fight in the cause of Allah" while the critical qualifier — "but do not exceed the limits" — is omitted. The full verse explicitly prohibits transgression and directly undermines any extremist interpretation.
+    </div>
+    <p>Islamic legal tradition includes constraints on warfare such as prohibition of killing non-combatants, protection of envoys and treaties, and restrictions on destruction not related to military necessity.</p>
+    <p>Early Muslim communities experienced persecution in Mecca, forced migration (Hijrah), and subsequent armed conflict in the Medina period. Warfare verses are therefore interpreted within a lived historical sequence rather than abstract theory.</p>
+  </div>
+
+  <div class="section" id="s3-4">
+    <div class="section-number">3.4</div>
+    <h2>Slavery in Islamic History</h2>
+    <p>Slavery existed long before Islam across Arabian societies, the Roman Empire, Persia, Africa, Europe, and other ancient civilizations. It functioned as a global economic and social institution in the premodern world.</p>
+    <p>The historical question is therefore not "Did slavery exist?" but rather: <em>"How did Islamic law regulate and interact with an already existing institution?"</em></p>
+    <p>The Qur'an repeatedly encourages freeing slaves as an act of righteousness and manumission as expiation for certain sins:</p>
+    <div class="quran-verse">
+      <div class="translation">"…the freeing of a slave."</div>
+      <a class="verse-ref" href="https://quran.com/90?startingVerse=13" target="_blank" rel="noopener">Qur'an 90:13</a>
+    </div>
+    <div class="quran-verse">
+      <div class="translation">"…he must free a believing slave…" (regarding expiation in certain cases)</div>
+      <a class="verse-ref" href="https://quran.com/4?startingVerse=92" target="_blank" rel="noopener">Qur'an 4:92</a>
+    </div>
+    <div class="quran-verse">
+      <div class="translation">"…encourage those ˹slaves˺ who seek a written contract ˹for their freedom˺ if you find goodness in them…"</div>
+      <a class="verse-ref" href="https://quran.com/24?startingVerse=33" target="_blank" rel="noopener">Qur'an 24:33</a>
+    </div>
+    <p>Islamic legal tradition imposed regulations including recognition of slave rights in jurisprudence, prohibition of arbitrary killing or abuse, pathways toward emancipation, and integration of freed individuals into society. This represented regulation of an existing system rather than an unrestricted ownership structure.</p>
+  </div>
+
+  <div class="section" id="s3-5">
+    <div class="section-number">3.5</div>
+    <h2>Polygyny</h2>
+    <div class="quran-verse">
+      <div class="translation">"…then marry other women of your choice — two, three, or four. But if you are afraid you will fail to maintain justice, then ˹content yourselves with˺ one."</div>
+      <a class="verse-ref" href="https://quran.com/4?startingVerse=3" target="_blank" rel="noopener">Qur'an 4:3</a>
+    </div>
+    <p>The verse establishes: a limitation on the number of wives; justice as a mandatory condition; and monogamy as the alternative if justice cannot be maintained.</p>
+    <p>Polygyny existed in many societies before Islam, often without formal limitation. Islamic law restricted the number of wives to four, introduced legal obligations toward wives, and imposed financial and ethical responsibilities — representing regulation of an existing practice rather than introduction of a new one.</p>
+
+    <div class="critique-block">
+      <div class="critique-header"><div class="critique-label">Common Critique</div>"Why can men have multiple wives but women cannot have multiple husbands?"</div>
+      <div class="critique-response">Classical Islamic legal reasoning connects this distinction to structural considerations in premodern societies: certainty of lineage and paternity, assignment of financial responsibility, inheritance structure, and legal guardianship. In premodern societies without modern genetic testing, lineage certainty was considered legally essential as it affected inheritance distribution, paternal obligations, and financial accountability toward children. Under one husband and multiple wives, paternity remained identifiable through childbirth. Under multiple husbands and one wife, paternity certainty became significantly more difficult within premodern conditions.</div>
+    </div>
+    <div class="callout note">
+      <div class="callout-label">Context</div>
+      Polygyny in Islamic law is permitted under conditions, not mandatory, and not universally practiced. The overwhelming majority of Muslim marriages historically and currently are monogamous.
+    </div>
+  </div>
+
+  <div class="section" id="s3-6">
+    <div class="section-number">3.6</div>
+    <h2>Sharia Law and "Sharia Courts"</h2>
+    <p>The term "Sharia" literally refers to a path or way. In Islamic context, it refers broadly to ethical guidance, worship practices, personal conduct, and legal principles derived from Islamic sources. It is not limited to criminal law alone.</p>
+    <p>In modern media discourse, "Sharia law" is often reduced to punishments, extremism, and authoritarian governance. However, classical Sharia encompasses:</p>
+    <ul>
+      <li>Prayer and worship practices</li>
+      <li>Charitable obligations</li>
+      <li>Contracts and commercial regulation</li>
+      <li>Marriage law and family ethics</li>
+      <li>Inheritance and dispute resolution</li>
+    </ul>
+    <p>Criminal punishments form only a small portion of broader legal discourse. Many online claims fail to distinguish between Islamic jurisprudence, political authoritarianism, and the actions of modern states or militant groups — three very different categories.</p>
+  </div>
+
+  <!-- ======================== PART 4 ======================== -->
+  <div id="part4">
+    <div class="part-divider"><span class="part-label">Part 4</span></div>
+    <div class="part-title">Comparative Religion</div>
+    <p class="part-intro">Examining Islam in relation to Christianity and Judaism through textual, theological, and historical analysis.</p>
+  </div>
+
+  <div class="section" id="s4-1">
+    <div class="section-number">4.1</div>
+    <h2>Christianity — Textual History</h2>
+    <p>The Christian Bible is not a single text originally revealed as one unified book. Rather, it is a collection of writings produced across different time periods, written by multiple authors, and compiled over centuries. It generally consists of the Old Testament and the New Testament, with different Christian traditions differing on canon structure and accepted books.</p>
+    <p>The original manuscripts (autographs) of New Testament writings are not extant today. Current biblical manuscripts consist of later handwritten copies, partial fragments, translations into various languages, and manuscript traditions copied across centuries. Textual reconstruction is therefore based on comparative manuscript analysis.</p>
+    <p>Biblical manuscript traditions contain textual variants, including spelling differences, word-order variations, additions or omissions in some manuscripts, and harmonization attempts by later scribes. Examples commonly discussed in textual criticism include:</p>
+    <ul>
+      <li>The longer ending of Mark (Mark 16:9–20)</li>
+      <li>The Pericope Adulterae (the "woman taken in adultery" passage in John 7:53–8:11)</li>
+      <li>The Johannine Comma (1 John 5:7)</li>
+    </ul>
+    <p>These passages are debated because they are absent in some early manuscripts. Modern Bible translations often include footnotes acknowledging these discussions.</p>
+    <p>The New Testament is primarily preserved in Koine Greek manuscripts, while Jesus historically spoke Aramaic. Translation history therefore plays a major role in Christian textual transmission.</p>
+  </div>
+
+  <div class="section" id="s4-2">
+    <div class="section-number">4.2</div>
+    <h2>Trinity — Logical Analysis</h2>
+    <p>Mainstream Christian theology generally defines the Trinity as one divine essence existing eternally as three distinct persons: the Father, the Son, and the Holy Spirit. Classical doctrine maintains that the three persons are fully divine — not three separate gods, yet not identical to one another personally.</p>
+    <p>A major philosophical question concerns how something can be simultaneously "one" and "three" in different respects. Christian theology responds by distinguishing between:</p>
+    <ul>
+      <li>Essence/nature → one</li>
+      <li>Personhood → three</li>
+    </ul>
+    <p>Christian theologians generally argue the doctrine does not divide God into parts, that divine essence remains singular, and that relational distinction does not equal multiple gods. They argue it is mysterious and metaphysically complex, but not logically contradictory within its own internal framework.</p>
+    <p>The formal doctrine was clarified through early theological disputes and ecumenical councils, including the Council of Nicaea (325 CE) and the Council of Constantinople (381 CE), which shaped mainstream orthodox Christian doctrine.</p>
+  </div>
+
+  <div class="section" id="s4-3">
+    <div class="section-number">4.3</div>
+    <h2>Jesus in Historical Context</h2>
+    <p>Modern scholarship often distinguishes between the "historical Jesus" (studied through first-century Judean context and historical sources) and the "theological Christ" (focused on divine status, salvation doctrine, and resurrection theology).</p>
+    <p>Jesus lived within Roman-occupied Judea, a Jewish religious environment, and Second Temple Judaism. His teachings interacted with Jewish law, messianic expectations, and religious leadership disputes of the period.</p>
+    <p>Mainstream Christian belief holds that Jesus was crucified, died, and later resurrected — the crucifixion being central to Christian salvation theology.</p>
+    <p>Islamic theology differs significantly on this point. The Qur'an states:</p>
+    <div class="quran-verse">
+      <div class="translation">And their saying, "We have killed the Messiah, Jesus, son of Mary, the messenger of Allah." But they neither killed nor crucified him — it was only made to appear so. Even those who argue for this ˹crucifixion˺ are in doubt. They have no knowledge whatsoever — only making assumptions. They certainly did not kill him.</div>
+      <a class="verse-ref" href="https://quran.com/4?startingVerse=157" target="_blank" rel="noopener">Qur'an 4:157</a>
+    </div>
+    <div class="callout note">
+      <div class="callout-label">Textual Note — Fact Check</div>
+      The verse attributes the boastful claim "We killed the Messiah" to the people who made it (reported speech), not as a Qur'anic affirmation. The Qur'an then immediately refutes this claim in the same verse.
+    </div>
+    <p>Islamic theology generally holds that Jesus was a prophet and Messiah, not divine, and was not killed by crucifixion in the sense described by Christian theology.</p>
+  </div>
+
+  <div class="section" id="s4-4">
+    <div class="section-number">4.4</div>
+    <h2>Judaism — Overview</h2>
+    <p>A central concept in Judaism is covenant — a binding relationship between God and the people of Israel. Biblical covenants include the Abrahamic covenant, the Mosaic covenant, and the Davidic covenant, which shape law, identity, communal obligation, and religious continuity.</p>
+    <p>Jewish religious life historically centers around Torah, legal interpretation, and communal observance. Rabbinic tradition developed extensive legal discussion concerning worship, ethics, purity laws, and civil conduct.</p>
+    <p>Jewish traditions historically expected a future Messiah, restoration and justice, and fulfillment of covenant promises. Mainstream Judaism does not accept Jesus as fulfilling these messianic expectations — a primary division between Judaism and Christianity.</p>
+    <p>Judaism, Christianity, and Islam share Abrahamic roots, prophetic traditions, and overlapping historical narratives. However, they differ significantly in theology, understanding of prophecy, scripture, law, and interpretation of revelation.</p>
+  </div>
+
+  <!-- ======================== PART 5 ======================== -->
+  <div id="part5">
+    <div class="part-divider"><span class="part-label">Part 5</span></div>
+    <div class="part-title">Philosophical Challenges</div>
+    <p class="part-intro">Engaging with the major philosophical objections raised against theistic belief, particularly from an Islamic theological framework.</p>
+  </div>
+
+  <div class="section" id="s5-1">
+    <div class="section-number">5.1</div>
+    <h2>The Problem of Evil</h2>
+    <p>The problem of evil asks how suffering and evil can exist alongside a God understood as all-powerful, all-knowing, and perfectly good. This is one of the oldest philosophical challenges in theology.</p>
+    <p>Suffering is often categorized into moral evil (human-caused harm), natural suffering (disease, disasters), personal suffering, and collective suffering.</p>
+    <p>The free will defense — a major theistic response — argues that meaningful moral freedom requires the possibility of harmful choices. A world containing free moral agents may therefore include moral evil, and eliminating all evil entirely may eliminate meaningful free will itself.</p>
+    <p>Some philosophical traditions argue suffering may develop moral character, produce resilience, and create conditions for compassion and growth.</p>
+    <p>Islamic theology generally frames worldly life as temporary, morally consequential, and a testing environment involving hardship and responsibility:</p>
+    <div class="quran-verse">
+      <div class="translation">"We will certainly test you with a touch of fear and famine and loss of property, life, and crops. Give good news to those who patiently endure."</div>
+      <a class="verse-ref" href="https://quran.com/2?startingVerse=155" target="_blank" rel="noopener">Qur'an 2:155</a>
+    </div>
+  </div>
+
+  <div class="section" id="s5-2">
+    <div class="section-number">5.2</div>
+    <h2>The Fine-Tuning Argument</h2>
+    <p>The fine-tuning argument refers to the observation that physical constants and conditions of the universe appear narrowly compatible with life. Examples discussed include gravitational force strength, the cosmological constant, and electromagnetic interaction ratios. Small changes in these values could significantly alter the possibility of life.</p>
+    <p>Islamic theology often interprets cosmic order and precision as signs of intentional creation. The Qur'an repeatedly directs attention toward natural order, celestial systems, and balance and proportion in creation as evidence of a Creator.</p>
+  </div>
+
+  <div class="section" id="s5-3">
+    <div class="section-number">5.3</div>
+    <h2>Consciousness</h2>
+    <p>Consciousness refers to subjective experience, awareness, internal perception, and self-reflective thought. A major philosophical question asks how subjective experience emerges from physical matter.</p>
+    <p>Some philosophers argue that neuroscience explains correlation between brain states and experiences, but not necessarily the subjective experience itself — describing brain activity does not fully explain awareness. This is sometimes referred to as the "hard problem of consciousness."</p>
+    <p>Islamic theology traditionally recognizes both physical and spiritual dimensions of human existence. Concepts such as rūḥ (spirit), nafs (self/soul), and intellect are discussed within a broader metaphysical framework that does not reduce the human person to purely material processes.</p>
+  </div>
+
+  <!-- ======================== PART 6 ======================== -->
+  <div id="part6">
+    <div class="part-divider"><span class="part-label">Part 6</span></div>
+    <div class="part-title">Modern Criticisms &amp; Internet Arguments</div>
+    <p class="part-intro">Addressing simplified arguments commonly circulated in social media environments, and examining both weak and strong response methodologies.</p>
+  </div>
+
+  <div class="section" id="s6-1">
+    <div class="section-number">6.1</div>
+    <h2>Social Media-Level Arguments</h2>
+    <p>This section addresses simplified or fragmented arguments commonly circulated in social media environments. These are not academic critiques but condensed talking points shaped by algorithmic media formats.</p>
+
+    <div class="critique-block">
+      <div class="critique-header"><div class="critique-label">Common Claim</div>"Islam spread by the sword"</div>
+      <div class="critique-response">A more historically accurate framing recognizes that the spread of Islam occurred through multiple mechanisms — governance, trade networks, migration, and scholarly transmission. Religious belief is not typically enforced as a simple binary conversion outcome in classical legal systems, and historical empires often included diverse religious populations under their governance structures. This claim, in its online form, compresses complex historical processes into a single causal explanation.</div>
+    </div>
+
+    <div class="critique-block">
+      <div class="critique-header"><div class="critique-label">Common Claim</div>"Contradiction compilations"</div>
+      <div class="critique-response">Online compilations of alleged contradictions often rely on isolated verses without context, translation-dependent interpretations, omission of linguistic or classical commentary, and lack of consideration for genre differences (legal, narrative, metaphorical text). In textual analysis, contradiction claims must account for context of revelation, linguistic range of key terms, and interpretive frameworks within the tradition. Many listed "contradictions" are resolved through contextual or linguistic analysis.</div>
+    </div>
+  </div>
+
+  <div class="section" id="s6-2">
+    <div class="section-number">6.2</div>
+    <h2>Weak Muslim Responses — An Honest Assessment</h2>
+    <div class="callout warning">
+      <div class="callout-label">Intellectual Honesty</div>
+      This section critically examines common weaknesses in how some Muslims respond to critiques — not to disparage, but to improve.
+    </div>
+    <p>A frequent issue is replacing argumentation with emotional reaction — anger-based replies, dismissal without explanation, and identity-based framing instead of evidence-based response. While emotional responses are understandable, they do not function as analytical rebuttals.</p>
+    <p>Other common weaknesses include:</p>
+    <ul>
+      <li>Citing hadith without verifying their classification (ṣaḥīḥ, ḥasan, etc.)</li>
+      <li>Using narrations outside their proper context</li>
+      <li>Treating weak reports as equally authoritative as authentic ones</li>
+      <li>Using partial verses or narrations, removing surrounding context</li>
+      <li>Ignoring linguistic or situational background</li>
+    </ul>
+    <p>These patterns weaken the credibility of a response even when the underlying position is valid.</p>
+  </div>
+
+  <div class="section" id="s6-3">
+    <div class="section-number">6.3</div>
+    <h2>Strong Response Methodology</h2>
+    <p>Not all questions have immediate or simple answers. A strong intellectual approach includes:</p>
+    <ul>
+      <li>Acknowledging limits of knowledge when necessary</li>
+      <li>Distinguishing between certainty and probability</li>
+      <li>Avoiding forced explanations where evidence is unclear</li>
+    </ul>
+    <p>Uncertainty, when properly stated, is not a weakness — it is intellectual honesty.</p>
+    <div class="callout definition">
+      <div class="callout-label">Key Methodological Rule</div>
+      Theology ≠ History ≠ Philosophy ≠ Social Media Claims.<br>
+      Each domain requires its own standards of evaluation. Mixing them produces confusion rather than clarity.
+    </div>
+  </div>
+
+  <!-- ======================== PART 7 ======================== -->
+  <div id="part7">
+    <div class="part-divider"><span class="part-label">Part 7</span></div>
+    <div class="part-title">Practical Dawah Ethics</div>
+    <p class="part-intro">Guidance on how to engage in conversations about Islam with integrity, respect, and intellectual discipline.</p>
+  </div>
+
+  <div class="section" id="s7-1">
+    <div class="section-number">7.1</div>
+    <h2>How to Speak Respectfully</h2>
+    <p>Respectful speech includes:</p>
+    <ul>
+      <li>Avoiding insults or mockery of beliefs or individuals</li>
+      <li>Maintaining a calm tone even under disagreement</li>
+      <li>Focusing on arguments rather than personal identity</li>
+    </ul>
+    <p>The objective is clarity, not domination of discussion. In disagreement, tone should remain steady rather than reactive, explanatory rather than confrontational, and grounded in reasoning rather than emotional escalation. The strength of a position is not measured by the intensity of its expression.</p>
+  </div>
+
+  <div class="section" id="s7-2">
+    <div class="section-number">7.2</div>
+    <h2>When Not to Debate</h2>
+    <p>Debate is not productive when:</p>
+    <ul>
+      <li>The other party is not genuinely interested in understanding</li>
+      <li>Arguments are being used purely for provocation</li>
+      <li>Repeated misrepresentation occurs despite clarification</li>
+    </ul>
+    <p>In such cases, disengagement is a valid and dignified response — it is not necessary to engage in every discussion.</p>
+    <p>Avoid engagement also when foundational knowledge is insufficient for the topic, topic complexity exceeds available understanding, or when a response would rely on speculation rather than knowledge. Silence or postponement is preferable to incorrect answers.</p>
+    <p>Not all environments are suitable for substantive discussion: public comment sections often reward performance over accuracy, while private discussions allow more depth and clarity.</p>
+  </div>
+
+  <div class="section" id="s7-3">
+    <div class="section-number">7.3</div>
+    <h2>Handling Hostility</h2>
+    <p>Hostility should not determine response quality. A disciplined response involves avoiding escalation, separating emotional tone from factual content, and focusing on clarity rather than reaction.</p>
+    <p>It is important to distinguish between:</p>
+    <ul>
+      <li><strong>Genuine critique</strong> — which requires substantive engagement</li>
+      <li><strong>Provocation or ridicule</strong> — which may not warrant a detailed response</li>
+    </ul>
+    <p>Treating both the same leads to unnecessary conflict and wastes intellectual energy.</p>
+  </div>
+
+  <div class="section" id="s7-4">
+    <div class="section-number">7.4</div>
+    <h2>Intellectual vs. Emotional Dawah</h2>
+    <p>Emotional-based communication typically relies on passion and intensity, identity reinforcement, and persuasive tone rather than structured reasoning. While it can be motivating, it is less effective in analytical debate contexts.</p>
+    <p>Intellectual daʿwah is based on structured reasoning, evidence-based arguments, clarity of concepts, and consistency in methodology. It prioritizes understanding over persuasion speed.</p>
+    <div class="callout definition">
+      <div class="callout-label">The Goal of Dawah in This Framework</div>
+      Clarity of understanding · Respectful communication · Intellectual honesty · Stability under criticism<br><br>
+      Not short-term argumentative victory.
+    </div>
+  </div>
+
+  <!-- ======================== APPENDICES ======================== -->
+  <div>
+    <div class="part-divider"><span class="part-label">Appendices</span></div>
+    <div class="part-title">Reference Material</div>
+    <p class="part-intro">Glossary, grading charts, bibliography, and historical timeline for quick reference.</p>
+  </div>
+
+  <div class="section" id="appendix-a">
+    <div class="section-number">Appendix A</div>
+    <h2>Glossary of Terms</h2>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">ʿAqīdah <span class="glossary-arabic">(عقيدة)</span></div>
+      <div class="glossary-def">Core Islamic creed or theological belief system.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Fiqh <span class="glossary-arabic">(فقه)</span></div>
+      <div class="glossary-def">Human understanding and legal interpretation of Islamic law derived from primary sources.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Sharia <span class="glossary-arabic">(الشريعة)</span></div>
+      <div class="glossary-def">Divine guidance encompassing ethics, law, and spiritual principles in Islam.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Hadith <span class="glossary-arabic">(حديث)</span></div>
+      <div class="glossary-def">Reports describing the sayings, actions, or approvals of the Prophet Muhammad ﷺ.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Isnād</div>
+      <div class="glossary-def">Chain of transmission used to verify the authenticity of hadith reports.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Tafsīr</div>
+      <div class="glossary-def">Exegesis or interpretation of the Qur'an.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Asbāb al-Nuzūl</div>
+      <div class="glossary-def">Context or circumstances of Qur'anic revelation.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Qirāʾāt</div>
+      <div class="glossary-def">Authorized modes of Qur'anic recitation transmitted through authentic oral chains.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Tawḥīd</div>
+      <div class="glossary-def">Absolute monotheism in Islam — the belief in the oneness of Allah.</div>
+    </div>
+
+    <div class="glossary-entry">
+      <div class="glossary-term">Fitnah</div>
+      <div class="glossary-def">Trial, test, or societal discord; used in theological and social contexts.</div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-label">Note</div>
+      These are general definitions. Further research through classical Islamic scholarship is always encouraged.
+    </div>
+  </div>
+
+  <div class="section" id="appendix-b">
+    <div class="section-number">Appendix B</div>
+    <h2>Hadith Grading Chart</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Grade</th>
+            <th>Arabic</th>
+            <th>Meaning</th>
+            <th>Reliability</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Ṣaḥīḥ</strong></td>
+            <td>صحيح</td>
+            <td>Authentic</td>
+            <td>High confidence; strong chain and content consistency</td>
+          </tr>
+          <tr>
+            <td><strong>Ḥasan</strong></td>
+            <td>حسن</td>
+            <td>Good</td>
+            <td>Acceptable reliability, slightly lower than ṣaḥīḥ</td>
+          </tr>
+          <tr>
+            <td><strong>Ḍaʿīf</strong></td>
+            <td>ضعيف</td>
+            <td>Weak</td>
+            <td>Issues in chain or content; not used alone for legal rulings</td>
+          </tr>
+          <tr>
+            <td><strong>Mawḍūʿ</strong></td>
+            <td>موضوع</td>
+            <td>Fabricated</td>
+            <td>Considered inauthentic; falsely attributed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.85rem; color:var(--muted); margin-top:0.75rem;">Hadith grading depends on multiple factors including narrator reliability, chain continuity, and textual consistency with stronger evidence.</p>
+  </div>
+
+  <div class="section" id="appendix-c">
+    <div class="section-number">Appendix C</div>
+    <h2>Source Bibliography</h2>
+
+    <p style="font-family:'DM Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--gold-dark); margin-bottom:0.75rem;">Primary Islamic Sources</p>
+    <ul>
+      <li>The Qur'an</li>
+      <li>Ṣaḥīḥ al-Bukhārī</li>
+      <li>Ṣaḥīḥ Muslim</li>
+      <li>Sunan collections (Abū Dāwūd, al-Tirmidhī, al-Nasā'ī, Ibn Mājah)</li>
+    </ul>
+
+    <p style="font-family:'DM Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--gold-dark); margin: 1.25rem 0 0.75rem;">Classical Tafsīr Works</p>
+    <ul>
+      <li>Tafsīr al-Ṭabarī</li>
+      <li>Tafsīr Ibn Kathīr</li>
+      <li>Al-Qurṭubī</li>
+      <li>Al-Rāzī</li>
+    </ul>
+
+    <p style="font-family:'DM Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--gold-dark); margin: 1.25rem 0 0.75rem;">Seerah Literature</p>
+    <ul>
+      <li>Ibn Hishām (edited recension of Ibn Isḥāq)</li>
+      <li>Al-Wāqidī (contextual historical reports)</li>
+    </ul>
+
+    <p style="font-family:'DM Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--gold-dark); margin: 1.25rem 0 0.75rem;">Comparative Religious Texts</p>
+    <ul>
+      <li>Hebrew Bible (Tanakh / Old Testament canon variants)</li>
+      <li>New Testament Greek manuscript tradition</li>
+      <li>Rabbinic literature (Talmudic corpus)</li>
+    </ul>
+
+    <p style="font-family:'DM Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--gold-dark); margin: 1.25rem 0 0.75rem;">Academic Fields</p>
+    <ul>
+      <li>Textual criticism (biblical studies)</li>
+      <li>Historical anthropology of religion</li>
+      <li>Philosophy of religion</li>
+    </ul>
+
+    <div class="callout note" style="margin-top:1.25rem;">
+      <div class="callout-label">Transparency Note</div>
+      AI was used solely for grammar and writing assistance in this manuscript. All Qur'anic verses, hadith references, and factual claims have been verified against human-reviewed sources.
+    </div>
+  </div>
+
+  <div class="section" id="appendix-d">
+    <div class="section-number">Appendix D</div>
+    <h2>Timeline of Early Islamic History</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">610 CE</div>
+        <div class="timeline-event">First revelation begins (Cave of Ḥirāʾ)</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">613 CE</div>
+        <div class="timeline-event">Public call to Islam begins (Daʿwah)</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">615 CE</div>
+        <div class="timeline-event">Migration to Abyssinia (First Hijrah)</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">622 CE</div>
+        <div class="timeline-event">Hijrah to Medina — Islamic calendar begins</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">624 CE</div>
+        <div class="timeline-event">Battle of Badr</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">625 CE</div>
+        <div class="timeline-event">Battle of Uḥud</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">627 CE</div>
+        <div class="timeline-event">Battle of the Trench (Khandaq)</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">628 CE</div>
+        <div class="timeline-event">Treaty of Ḥudaybiyyah</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">630 CE</div>
+        <div class="timeline-event">Conquest of Mecca</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">632 CE</div>
+        <div class="timeline-event">Passing of the Prophet Muhammad ﷺ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-ornament">✦ ✦ ✦</div>
+    <p>An open manuscript — free to read, share, and learn from.</p>
+    <p style="margin-top:0.5rem; font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.05em;">No login. No paywalls. No ads.</p>
+  </footer>
+
+</div><!-- end #main -->
+
+<!-- SCROLL TO TOP -->
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // Sidebar toggle
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const menuIcon = document.getElementById('menu-icon');
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+    menuIcon.textContent = sidebar.classList.contains('open') ? '✕' : '☰';
+  }
+
+  function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+    document.getElementById('menu-icon').textContent = '☰';
+  }
+
+  // Scroll to top button
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('scroll-top');
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // Intersection observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.section, .part-title').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Active nav link highlighting
+  const sections = document.querySelectorAll('.section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + entry.target.id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(s => navObserver.observe(s));
+</script>
+</body>
+</html>
