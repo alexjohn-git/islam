@@ -6,8 +6,8 @@
   <title>Understanding Islam — An Open Manuscript</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Star_and_Crescent.svg/960px-Star_and_Crescent.svg.png">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="shortcut icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Star_and_Crescent.svg/960px-Star_and_Crescent.svg.png">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -72,10 +72,11 @@
     #sidebar {
       position: fixed;
       left: 0; top: 0; bottom: 0;
-      width: 280px;
+      width: min(280px, 85vw);
       background: var(--ink);
       color: var(--warm);
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       z-index: 100;
       transform: translateX(-100%);
       transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -738,6 +739,8 @@
       font-size: 1.1rem;
       color: var(--ink);
       font-weight: 300;
+      /* iOS: prevent zoom on focus — must be at least 16px */
+      font-size: max(1.1rem, 16px);
     }
     #search-input::placeholder { color: var(--muted); }
 
@@ -850,12 +853,95 @@
       padding: 0 2px;
     }
 
+    /* ---- MOBILE ---- */
     @media (max-width: 640px) {
-      #main { padding-left: 1rem; padding-right: 1rem; }
-      .hero { padding: 3rem 0 2.5rem; }
-      .quran-verse .arabic { font-size: 1.15rem; }
+      /* Base */
+      body { font-size: 16px; }
+
+      /* Tap highlight removal for iOS */
+      * { -webkit-tap-highlight-color: transparent; }
+
+      /* Topbar */
+      #topbar { padding: 0 0.85rem; gap: 0.6rem; }
+      #topbar-title {
+        font-size: 0.78rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+      }
+      #menu-btn { padding: 0.45rem 0.6rem; flex-shrink: 0; }
+      #menu-btn span:last-of-type { display: none; } /* hide "Contents" text */
+
+      /* Search button — icon only */
+      #search-btn { padding: 0.45rem 0.65rem; flex-shrink: 0; }
+      #search-btn span:nth-of-type(2) { display: none; } /* hide "Search" text */
       #search-btn .kbd { display: none; }
-      #search-btn span:last-of-type { display: none; }
+
+      /* Main padding */
+      #main { padding-left: 1rem; padding-right: 1rem; }
+
+      /* Hero */
+      .hero { padding: 2.5rem 0 2rem; }
+      .hero-ornament { font-size: 1.4rem; }
+      .hero-bismillah { font-size: 0.95rem; }
+      .hero-meta { gap: 0.6rem; }
+      .hero-badge { font-size: 0.62rem; padding: 0.25rem 0.55rem; }
+
+      /* Section headings */
+      .section h2 { font-size: 1.25rem; }
+      .part-title { font-size: 1.5rem !important; }
+
+      /* Quranic verse */
+      .quran-verse { padding: 1rem 1rem 1rem 1.1rem; }
+      .quran-verse .arabic { font-size: 1.1rem; line-height: 2; }
+      .quran-verse .translation { font-size: 0.95rem; }
+
+      /* Callout */
+      .callout { padding: 0.9rem 1rem; font-size: 0.9rem; }
+
+      /* Table — make it scrollable with a visual hint */
+      .table-wrap { -webkit-overflow-scrolling: touch; }
+      table { font-size: 0.82rem; min-width: 480px; }
+      th, td { padding: 0.5rem 0.75rem; }
+
+      /* Search modal — full screen on mobile */
+      #search-modal { padding-top: 0; align-items: flex-end; }
+      #search-box {
+        border-radius: 12px 12px 0 0;
+        max-width: 100%;
+        margin: 0;
+        /* slide up animation */
+        animation: slideUp 0.25s ease;
+      }
+      @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to   { transform: translateY(0); }
+      }
+      #search-results { max-height: 55vh; }
+      #search-footer { display: none; } /* keyboard hints irrelevant on touch */
+      #search-input { font-size: 1rem; } /* prevent iOS zoom on focus */
+
+      /* Tap targets — min 44px height */
+      .nav-link { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+      .search-result-item { padding: 0.9rem 1rem; }
+      .quran-verse .verse-ref { padding: 0.3rem 0; }
+
+      /* Critique blocks */
+      .critique-header { font-size: 0.9rem; }
+      .critique-response { font-size: 0.9rem; }
+
+      /* Timeline */
+      .timeline { padding-left: 1.6rem; }
+
+      /* Scroll to top button — move left a bit from edge */
+      #scroll-top { bottom: 1.25rem; right: 1rem; }
+    }
+
+    /* Slightly larger phones and small tablets */
+    @media (min-width: 641px) and (max-width: 900px) {
+      #main { padding-left: 1.25rem; padding-right: 1.25rem; }
+      body { font-size: 17px; }
     }
   </style>
 </head>
